@@ -5,19 +5,15 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CSVReader {
 
     private String fileName;
-    private DateTimeFormatter dateTimeFormatter;
 
     public CSVReader(String fileName) {
         this.fileName = fileName;
-        this.dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     }
 
     /*
@@ -34,7 +30,7 @@ public class CSVReader {
             txnRecord.setTransactionId(record.get("transactionId"));
             txnRecord.setFromAccountId(record.get("fromAccountId"));
             txnRecord.setToAccountId(record.get("toAccountId"));
-            txnRecord.setCreatedAt(LocalDateTime.parse(record.get("createdAt"), this.dateTimeFormatter));
+            txnRecord.setCreatedAt(DateTimeUtil.parse(record.get("createdAt")));
             txnRecord.setAmount(BigDecimal.valueOf(Double.parseDouble(record.get("amount"))));
             txnRecord.setTransactionType(record.get("transactionType"));
             txnRecord.setRelatedTransaction(record.get("relatedTransaction"));

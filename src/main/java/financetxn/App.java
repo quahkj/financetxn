@@ -19,7 +19,7 @@ public class App {
             e.printStackTrace();
         }
         System.out.println("Looking for testfile.csv in " + currentPath);
-        CSVReader csvReader = new CSVReader(currentPath + "\\testfile.csv");
+        CSVReader csvReader = new CSVReader(currentPath + "\\" + args[0]);
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter account id: ");

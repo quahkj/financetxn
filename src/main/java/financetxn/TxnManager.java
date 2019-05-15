@@ -2,7 +2,8 @@ package financetxn;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -10,12 +11,10 @@ import java.util.stream.Collectors;
 public class TxnManager {
 
     private List<TxnRecord> txnRecordList;
-    private DateTimeFormatter dateTimeFormatter;
     private Set<String> validTransactionIdSet;
 
     public TxnManager(List<TxnRecord> txnRecordList, String accountId, String from, String to) {
         this.txnRecordList = txnRecordList;
-        this.dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         this.preprocess(accountId, from, to);
     }
 
@@ -23,8 +22,8 @@ public class TxnManager {
      * find the matched transaction id and filter the reversal transaction id
      */
     private void preprocess(String accountId, String from, String to) {
-        LocalDateTime fromDateTime = LocalDateTime.parse(from, this.dateTimeFormatter);
-        LocalDateTime toDateTime = LocalDateTime.parse(to, this.dateTimeFormatter);
+        LocalDateTime fromDateTime = DateTimeUtil.parse(from);
+        LocalDateTime toDateTime = DateTimeUtil.parse(to);
 
         Set<String> paymentTransactionIdSet = this.txnRecordList.stream()
                 .filter(txnRecord ->
@@ -60,14 +59,19 @@ public class TxnManager {
 
         BigDecimal relativeBalance = BigDecimal.ZERO;
         for(String transactionId : this.validTransactionIdSet) {
-            for(TxnRecord txnRecord : this.txnRecordList) {
-                if(txnRecord.getTransactionId().equalsIgnoreCase(transactionId)) {
-                    relativeBalance = relativeBalance.add(txnRecord.getAmount());
-                }
-            }
+            BigDecimal amount = searchTransactionAmount(transactionId);
+            relativeBalance = relativeBalance.add(amount);
         }
 
         return relativeBalance.negate();
+    }
+
+    private BigDecimal searchTransactionAmount(String transactionId) {
+
+        TxnRecord txnRecord = new TxnRecord(transactionId);
+        int index = Collections.binarySearch(this.txnRecordList, txnRecord, Comparator.comparing(TxnRecord::getTransactionId));
+
+        return this.txnRecordList.get(index).getAmount();
     }
 
 }

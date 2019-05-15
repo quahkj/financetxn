@@ -16,6 +16,10 @@ public class TxnRecord {
     public TxnRecord() {
     }
 
+    public TxnRecord(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
     public TxnRecord(String transactionId, String fromAccountId, String toAccountId, LocalDateTime createdAt, BigDecimal amount, String transactionType, String relatedTransaction) {
         this.transactionId = transactionId;
         this.fromAccountId = fromAccountId;

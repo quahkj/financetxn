@@ -63,20 +63,4 @@ public class CSVReaderTest {
         assertEquals(actualTxnRecordList.get(4).getTransactionType(), "PAYMENT");
         assertEquals(actualTxnRecordList.get(4).getRelatedTransaction(), "");
     }
-
-
-//    @Test
-//    public void getRecords_shouldReturnNull_whenInitialiseWithNonExistFile() {
-//
-//        List<TxnRecord> actualTxnRecordList = null;
-//        try {
-//            String currentPath = new File(".").getCanonicalPath();
-//            CSVReader csvReader = new CSVReader(currentPath + "\\testfilefdsfgd.csv");
-//            actualTxnRecordList = csvReader.getRecords();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        assertEquals(actualTxnRecordList, null);
-//    }
 }
