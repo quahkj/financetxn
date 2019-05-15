@@ -20,6 +20,9 @@ public class CSVReader {
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     }
 
+    /*
+     * Convert CSV records into List structure for futher processing
+     */
     public List<TxnRecord> getRecords() throws IOException {
 
         Reader reader = new FileReader(new File(this.fileName));

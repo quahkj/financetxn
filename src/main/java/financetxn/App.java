@@ -3,12 +3,40 @@
  */
 package financetxn;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+
+        // Due to time constraint, below inputs will not be validated. Assume all inputs are valid.
+        String currentPath = null;
+        try {
+            currentPath = new File(".").getCanonicalPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Looking for testfile.csv in " + currentPath);
+        CSVReader csvReader = new CSVReader(currentPath + "\\testfile.csv");
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter account id: ");
+        String accountId = scanner.nextLine();
+
+        System.out.print("Enter from date/time: ");
+        String from = scanner.nextLine();
+
+        System.out.print("Enter to date/time: ");
+        String to = scanner.nextLine();
+
+        try {
+            TxnManager txnManager = new TxnManager(csvReader.getRecords(), accountId, from, to);
+            System.out.println("Relative balance for the period is: " + txnManager.calcRelativeBalance());
+            System.out.println("Number of transactions included is: " + txnManager.getNumberOfTransactions());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

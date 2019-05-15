@@ -32,5 +32,21 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.6'
 }
 
+task executablejar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File',
+                'Implementation-Version': '1.0',
+                'Main-Class': 'financetxn.App'
+    }
+    baseName = project.name
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task copyTestfile(type: Copy) {
+    from file("testfile.csv")
+    into file("$buildDir/libs")
+}
+
 // Define the main class for the application
 mainClassName = 'financetxn.App'
